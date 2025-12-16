@@ -58,21 +58,10 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-b from-background to-secondary/20">
       <div className="container max-w-4xl mx-auto px-4 py-12 md:py-20">
         <header className="text-center mb-16 animate-fade-in">
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-6">
             <div className="relative">
               <div className="w-2 h-16 bg-accent/30 rounded-full animate-candle"></div>
               <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-6 bg-gradient-to-t from-amber-500/80 to-amber-300/40 rounded-full blur-sm animate-candle"></div>
-            </div>
-          </div>
-
-          <div className="flex justify-center mb-8">
-            <div className="relative w-48 h-48 md:w-64 md:h-64">
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-accent/5 rounded-full blur-2xl"></div>
-              <img 
-                src="https://cdn.poehali.dev/files/image.png" 
-                alt="Алексей Мельников"
-                className="relative w-full h-full object-cover rounded-full border-4 border-accent/20 shadow-2xl"
-              />
             </div>
           </div>
           
