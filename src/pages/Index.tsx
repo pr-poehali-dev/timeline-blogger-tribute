@@ -3,15 +3,52 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Icon from "@/components/ui/icon";
 import { Slider } from "@/components/ui/slider";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const Index = () => {
   const [spectrumView, setSpectrumView] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<number | null>(null);
+  const [hoveredTelescope, setHoveredTelescope] = useState<string | null>(null);
 
   const spectrumModes = [
     { name: "Видимый свет", color: "from-purple-500 to-blue-500" },
     { name: "Инфракрасный", color: "from-red-600 to-orange-500" },
     { name: "Рентгеновский", color: "from-cyan-400 to-blue-600" },
     { name: "Комбинированное", color: "from-purple-500 via-orange-500 to-cyan-400" }
+  ];
+
+  const telescopeGallery = [
+    {
+      title: "Столпы Творения",
+      telescope: "Hubble",
+      year: "1995",
+      description: "Культовый снимок туманности Орла, показывающий гигантские колонны межзвёздного газа и пыли",
+      image: "https://cdn.poehali.dev/projects/87bddefd-fc39-401d-88f0-581933a8b1ef/files/3182d441-7980-45ac-ac74-c62cef17e45d.jpg",
+      color: "purple"
+    },
+    {
+      title: "Глубокое поле JWST",
+      telescope: "James Webb",
+      year: "2022",
+      description: "Самое глубокое инфракрасное изображение Вселенной, показывающее тысячи галактик",
+      image: "https://cdn.poehali.dev/projects/87bddefd-fc39-401d-88f0-581933a8b1ef/files/a1d1334a-9bcb-4439-b6b9-ac8836255df6.jpg",
+      color: "orange"
+    },
+    {
+      title: "Спиральная галактика",
+      telescope: "VLT",
+      year: "2018",
+      description: "Детальное изображение спиральной галактики с миллиардами звёзд",
+      image: "https://cdn.poehali.dev/projects/87bddefd-fc39-401d-88f0-581933a8b1ef/files/935c1eb1-183d-4822-b9bf-08708cebfefc.jpg",
+      color: "blue"
+    }
+  ];
+
+  const telescopeComparison = [
+    { name: "Человеческий глаз", detail: 1, light: 1, icon: "Eye" },
+    { name: "Любительский телескоп", detail: 50, light: 100, icon: "Telescope" },
+    { name: "Hubble", detail: 5000, light: 40000, icon: "Satellite" },
+    { name: "James Webb", detail: 10000, light: 100000, icon: "Rocket" }
   ];
 
   return (
@@ -204,6 +241,67 @@ const Index = () => {
               </h2>
             </div>
             
+            <Card className="bg-slate-900/50 backdrop-blur-sm border-cyan-500/20 p-8 mb-8">
+              <p className="text-lg text-gray-300 leading-relaxed mb-8">
+                Сравнение возможностей: от человеческого глаза до космических обсерваторий
+              </p>
+              
+              <div className="space-y-4">
+                {telescopeComparison.map((item, index) => (
+                  <div
+                    key={index}
+                    className="relative"
+                    onMouseEnter={() => setHoveredTelescope(item.name)}
+                    onMouseLeave={() => setHoveredTelescope(null)}
+                  >
+                    <div className="flex items-center gap-4 p-4 bg-slate-950/50 rounded-lg border border-cyan-500/10 hover:border-cyan-500/30 transition-all cursor-pointer">
+                      <Icon name={item.icon as any} className="w-8 h-8 text-cyan-400" />
+                      <div className="flex-grow">
+                        <div className="font-semibold text-white mb-2">{item.name}</div>
+                        <div className="space-y-2">
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span className="text-gray-400">Детализация</span>
+                              <span className="text-cyan-400">×{item.detail}</span>
+                            </div>
+                            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-1000"
+                                style={{ width: `${Math.min((item.detail / 10000) * 100, 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                          <div>
+                            <div className="flex justify-between text-sm mb-1">
+                              <span className="text-gray-400">Сбор света</span>
+                              <span className="text-purple-400">×{item.light}</span>
+                            </div>
+                            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+                              <div 
+                                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-1000"
+                                style={{ width: `${Math.min((item.light / 100000) * 100, 100)}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {hoveredTelescope === item.name && (
+                      <div className="absolute left-full ml-4 top-0 z-20 w-64 p-4 bg-slate-900 border border-cyan-500/30 rounded-lg shadow-xl animate-fade-in hidden lg:block">
+                        <p className="text-sm text-gray-300">
+                          {item.name === "Человеческий глаз" && "Базовая способность видеть звёздное небо"}
+                          {item.name === "Любительский телескоп" && "Можно увидеть кратеры Луны и кольца Сатурна"}
+                          {item.name === "Hubble" && "Видит галактики на расстоянии 13 миллиардов световых лет"}
+                          {item.name === "James Webb" && "Видит первые галактики Вселенной в инфракрасном диапазоне"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Card>
+            
             <div className="grid md:grid-cols-2 gap-6">
               <Card className="bg-slate-900/50 backdrop-blur-sm border-cyan-500/20 p-6">
                 <div className="flex items-center gap-3 mb-4">
@@ -342,6 +440,49 @@ const Index = () => {
             </Card>
           </section>
 
+          <section className="animate-fade-in">
+            <div className="flex items-center gap-4 mb-8">
+              <Icon name="Images" className="w-10 h-10 text-emerald-400" />
+              <h2 className="text-4xl md:text-5xl font-cormorant font-bold">
+                Галерея космических шедевров
+              </h2>
+            </div>
+            
+            <p className="text-lg text-gray-300 leading-relaxed mb-8 text-center max-w-3xl mx-auto">
+              Реальные снимки, сделанные величайшими телескопами человечества. Нажмите на изображение, чтобы узнать больше.
+            </p>
+            
+            <div className="grid md:grid-cols-3 gap-6">
+              {telescopeGallery.map((item, index) => (
+                <Card
+                  key={index}
+                  className="group bg-slate-900/50 backdrop-blur-sm border-purple-500/20 overflow-hidden cursor-pointer hover:scale-105 transition-transform duration-300"
+                  onClick={() => setSelectedImage(index)}
+                >
+                  <div className="aspect-square overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="text-lg font-cormorant font-semibold text-white">{item.title}</h3>
+                      <Icon name="Maximize2" className="w-5 h-5 text-purple-400 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-400 mb-2">
+                      <Icon name="Telescope" className="w-4 h-4" />
+                      <span>{item.telescope}</span>
+                      <span>•</span>
+                      <span>{item.year}</span>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </section>
+
           <section className="animate-fade-in-slow py-20">
             <Card className="bg-gradient-to-br from-purple-900/30 via-pink-900/20 to-blue-900/30 backdrop-blur-sm border-purple-500/30 p-12 text-center">
               <div className="mb-8">
@@ -385,6 +526,53 @@ const Index = () => {
           <p>Лонгрид о телескопах и взгляде в бесконечность</p>
         </footer>
       </div>
+
+      <Dialog open={selectedImage !== null} onOpenChange={() => setSelectedImage(null)}>
+        <DialogContent className="max-w-4xl bg-slate-900 border-purple-500/30">
+          {selectedImage !== null && (
+            <>
+              <DialogHeader>
+                <DialogTitle className="text-3xl font-cormorant text-white">
+                  {telescopeGallery[selectedImage].title}
+                </DialogTitle>
+              </DialogHeader>
+              
+              <div className="space-y-6">
+                <img
+                  src={telescopeGallery[selectedImage].image}
+                  alt={telescopeGallery[selectedImage].title}
+                  className="w-full rounded-lg"
+                />
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 text-gray-300">
+                    <div className="flex items-center gap-2">
+                      <Icon name="Telescope" className="w-5 h-5 text-purple-400" />
+                      <span className="font-semibold">{telescopeGallery[selectedImage].telescope}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Icon name="Calendar" className="w-5 h-5 text-purple-400" />
+                      <span>{telescopeGallery[selectedImage].year}</span>
+                    </div>
+                  </div>
+                  
+                  <p className="text-lg text-gray-300 leading-relaxed">
+                    {telescopeGallery[selectedImage].description}
+                  </p>
+                  
+                  <div className="p-4 bg-slate-950/50 rounded-lg border border-purple-500/20">
+                    <p className="text-sm text-gray-400">
+                      {selectedImage === 0 && "Этот снимок изменил наше представление о процессе звездообразования и стал одним из самых узнаваемых космических изображений."}
+                      {selectedImage === 1 && "Первое изображение глубокого космоса от James Webb показало галактики возрастом более 13 миллиардов лет."}
+                      {selectedImage === 2 && "Спиральные галактики содержат сотни миллиардов звёзд и являются домом для бесчисленных планетных систем."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
